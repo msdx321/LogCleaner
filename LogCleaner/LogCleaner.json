@@ -1,0 +1,11 @@
+{
+    "Author": "msdx321",
+    "Name": "LogCleaner",
+    "Punchline": "Automatic log cleaner",
+    "Description": "Simple auto logs cleaner and compressor.",
+    "InternalName": "samplePlugin",
+    "ApplicableVersion": "any",
+    "Tags": [
+        "plugin"
+    ]
+}
