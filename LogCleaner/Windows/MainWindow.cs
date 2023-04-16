@@ -165,7 +165,7 @@ public class MainWindow : Window, IDisposable
             case < 0:
                 return "-" + SizeConvert(-length);
             case 0:
-                return "0.0 bytes";
+                return "0.0 Bytes";
         }
 
         var mag = (int)Math.Log(length, byteConversion);

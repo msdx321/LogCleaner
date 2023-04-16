@@ -3,9 +3,10 @@
     "Name": "LogCleaner",
     "Punchline": "Automatic log cleaner",
     "Description": "Simple auto logs cleaner and compressor.",
-    "InternalName": "samplePlugin",
+    "InternalName": "logCleaner",
     "ApplicableVersion": "any",
     "Tags": [
-        "plugin"
+        "plugin",
+        "fflogs"
     ]
 }
