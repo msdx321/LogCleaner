@@ -33,6 +33,7 @@ public class Plugin : IDalamudPlugin
         });
 
         PluginInterface.UiBuilder.Draw += DrawUi;
+        PluginInterface.UiBuilder.OpenConfigUi += OnSetting;
     }
 
     private DalamudPluginInterface PluginInterface { get; init; }
@@ -52,6 +53,11 @@ public class Plugin : IDalamudPlugin
     }
 
     private void OnCommand(string command, string args)
+    {
+        MainWindow.IsOpen = true;
+    }
+
+    private void OnSetting()
     {
         MainWindow.IsOpen = true;
     }

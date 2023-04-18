@@ -12,6 +12,7 @@ namespace LogCleaner;
 public static class FileUtils
 {
     private static ulong CurWorkers;
+    private static ulong RefreshPending;
 
     public static bool IsFileLocked(string filePath)
     {
@@ -26,6 +27,11 @@ public static class FileUtils
         }
 
         return false;
+    }
+
+    public static bool NeedRefresh()
+    {
+        return Interlocked.CompareExchange(ref RefreshPending, 0, 1) == 1;
     }
 
     public static bool IsWorking()
@@ -73,6 +79,7 @@ public static class FileUtils
                 output.Write(compressed);
                 output.Dispose();
                 File.Move(filePath, compressPath);
+                Interlocked.Exchange(ref RefreshPending, 1);
             }
             catch (Exception ex)
             {
@@ -145,6 +152,7 @@ public static class FileUtils
                 f.Write(decompressed);
                 f.Dispose();
                 File.Move(filePath, decompressPath);
+                Interlocked.Exchange(ref RefreshPending, 1);
             }
             catch (Exception ex)
             {

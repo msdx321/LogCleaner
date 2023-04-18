@@ -14,7 +14,7 @@ public class MainWindow : Window, IDisposable
     private readonly FileDialogManager fileDialogManager;
     private readonly Plugin plugin;
     private DirectoryInfo di;
-    private FileInfo[]? fiArray;
+    private FileInfo[] fiArray;
 
     public MainWindow(Plugin plugin) : base(
         "Log Status", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
@@ -41,6 +41,8 @@ public class MainWindow : Window, IDisposable
             di = new DirectoryInfo(configuration.LogPath);
         }
 
+        fiArray = di.GetFiles();
+
         if (configuration.AutoCompress) FileUtils.AutoCompress(di, configuration.CompressThreshold);
 
         if (configuration.AutoClean) FileUtils.AutoClean(di, configuration.CleanThreshold);
@@ -50,8 +52,11 @@ public class MainWindow : Window, IDisposable
 
     public override void Draw()
     {
-        di.Refresh();
-        fiArray = di.GetFiles();
+        if (FileUtils.NeedRefresh())
+        {
+            di.Refresh();
+            fiArray = di.GetFiles();
+        }
 
         if (ImGui.BeginTable("Logs", 3, ImGuiTableFlags.Borders | ImGuiTableFlags.ScrollY | ImGuiTableFlags.Resizable,
                              new Vector2(ImGui.GetWindowWidth() - 50, 500)))
@@ -102,11 +107,14 @@ public class MainWindow : Window, IDisposable
             ImGui.EndTable();
         }
 
-        if (!FileUtils.IsWorking())
+        if (ImGui.Button("Compress All")) FileUtils.Compress(fiArray);
+        ImGui.SameLine();
+        if (ImGui.Button("Decompress All")) FileUtils.Decompress(fiArray);
+        ImGui.SameLine();
+        if (ImGui.Button("Refresh"))
         {
-            if (ImGui.Button("Compress All")) FileUtils.Compress(fiArray);
-            ImGui.SameLine();
-            if (ImGui.Button("Decompress All")) FileUtils.Decompress(fiArray);
+            di.Refresh();
+            fiArray = di.GetFiles();
         }
 
         ImGui.Text($"Current logs path: {plugin.Configuration.LogPath}");
