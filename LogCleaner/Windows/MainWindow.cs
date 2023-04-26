@@ -45,7 +45,8 @@ public class MainWindow : Window, IDisposable
 
         if (configuration.AutoCompress) FileUtils.AutoCompress(di, configuration.CompressThreshold);
 
-        if (configuration.AutoClean) FileUtils.AutoClean(di, configuration.CleanThreshold);
+        if (configuration.AutoClean)
+            FileUtils.AutoClean(di, configuration.CleanThreshold, configuration.DeletePermanently);
     }
 
     public void Dispose() { }
@@ -89,6 +90,11 @@ public class MainWindow : Window, IDisposable
                         ImGui.PushID(i);
                         if (ImGui.Button("Decompress")) FileUtils.Decompress(fi.FullName);
                         ImGui.PopID();
+                        ImGui.SameLine();
+                        ImGui.PushID(i);
+                        if (ImGui.Button("Delete")) FileUtils.Delete(fi.FullName, configuration.DeletePermanently);
+                        ImGui.PopID();
+
                     }
                 }
                 else
@@ -97,6 +103,10 @@ public class MainWindow : Window, IDisposable
                     {
                         ImGui.PushID(i);
                         if (ImGui.Button("Compress")) FileUtils.Compress(fi.FullName);
+                        ImGui.PopID();
+                        ImGui.SameLine();
+                        ImGui.PushID(i);
+                        if (ImGui.Button("Delete")) FileUtils.Delete(fi.FullName, configuration.DeletePermanently);
                         ImGui.PopID();
                     }
                 }
@@ -138,7 +148,7 @@ public class MainWindow : Window, IDisposable
         configuration.CleanThreshold = cleanThreshold;
         ImGui.SameLine();
         if (ImGui.Button("Clean"))
-            FileUtils.AutoClean(di, configuration.CleanThreshold);
+            FileUtils.AutoClean(di, configuration.CleanThreshold, configuration.DeletePermanently);
 
         ImGui.SameLine();
         var autoClean = configuration.AutoClean;
@@ -160,6 +170,10 @@ public class MainWindow : Window, IDisposable
         var autoCompress = configuration.AutoCompress;
         ImGui.Checkbox("Auto Compress", ref autoCompress);
         configuration.AutoCompress = autoCompress;
+
+        var deletePermanently = configuration.DeletePermanently;
+        ImGui.Checkbox("Delete logs/archives permanently", ref deletePermanently);
+        configuration.DeletePermanently = deletePermanently;
 
         configuration.Save();
     }

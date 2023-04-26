@@ -185,6 +185,48 @@ public static class FileUtils
         }).Start();
     }
 
+    public static void Delete(string filePath, bool permanent)
+    {
+        if (!File.Exists(filePath))
+        {
+            PluginLog.Error("LogCleaner: Error: {0} doesn't exist.", filePath);
+            return;
+        }
+
+        new Thread(() =>
+        {
+            Interlocked.Increment(ref CurWorkers);
+            var flag = permanent
+                           ? RecycleOption.DeletePermanently
+                           : RecycleOption.SendToRecycleBin;
+            FileSystem.DeleteFile(filePath, UIOption.OnlyErrorDialogs, flag);
+            Interlocked.Exchange(ref RefreshPending, 1);
+            Interlocked.Decrement(ref CurWorkers);
+        }).Start();
+    }
+
+    public static void Delete(List<string> filePaths, bool permanent)
+    {
+        new Thread(() =>
+        {
+            foreach (var filePath in filePaths) Delete(filePath, permanent);
+        }).Start();
+    }
+
+    public static void Delete(FileInfo[] fiArray, bool permanent)
+    {
+        new Thread(() =>
+        {
+            var fullNames = new List<string>();
+
+            foreach (var fi in fiArray)
+                if (!IsFileLocked(fi.FullName))
+                    fullNames.Add(fi.FullName);
+
+            Delete(fullNames, permanent);
+        }).Start();
+    }
+
     public static int CheckAge(FileInfo fi)
     {
         DateTime date;
@@ -222,7 +264,7 @@ public static class FileUtils
         }).Start();
     }
 
-    public static void AutoClean(DirectoryInfo di, int days)
+    public static void AutoClean(DirectoryInfo di, int days, bool permanent)
     {
         di.Refresh();
         var fiArray = di.GetFiles();
@@ -239,8 +281,7 @@ public static class FileUtils
                     fullNames.Add(fi.FullName);
             }
 
-            foreach (var f in fullNames)
-                FileSystem.DeleteFile(f, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+            Delete(fullNames, permanent);
         }).Start();
     }
 }

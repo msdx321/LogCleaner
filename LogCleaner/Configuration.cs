@@ -16,11 +16,12 @@ public class Configuration : IPluginConfiguration
     public bool AutoClean { get; set; }
     public int CompressThreshold { get; set; } = 5;
     public bool AutoCompress { get; set; }
+    public bool DeletePermanently { get; set; }
     public int Version { get; set; } = 0;
 
     public void Initialize(DalamudPluginInterface pi)
     {
-        this.pluginInterface = pi;
+        pluginInterface = pi;
     }
 
     public void Save()
