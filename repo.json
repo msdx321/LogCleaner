@@ -3,8 +3,8 @@
   "Author": "msdx321",
   "Name": "LogCleaner",
   "InternalName": "LogCleaner",
-  "AssemblyVersion": "0.0.0.0",
-  "TestingAssemblyVersion": "0.0.0.0",
+  "AssemblyVersion": "1.0.0.0",
+  "TestingAssemblyVersion": "1.0.0.0",
   "Description": "Simple auto logs cleaner and compressor.",
   "ApplicableVersion": "any",
   "RepoUrl": "https://github.com/msdx321/LogCleaner",
@@ -18,8 +18,8 @@
   "Punchline": "A log cleaner.",
   "IsHide": "False",
   "IsTestingExclusive": "False",
-  "DownloadLinkInstall": "https://github.com/msdx321/LogCleaner/releases/download/v0.0.0.0/IINACT.zip",
-  "DownloadLinkTesting": "https://github.com/msdx321/LogCleaner/releases/download/v0.0.0.0/IINACT.zip",
-  "DownloadLinkUpdate": "https://github.com/msdx321/LogCleaner/releases/download/v0.0.0.0/IINACT.zip"
+  "DownloadLinkInstall": "https://github.com/msdx321/LogCleaner/releases/download/v1.0.0.0/LogCleaner.zip",
+  "DownloadLinkTesting": "https://github.com/msdx321/LogCleaner/releases/download/v1.0.0.0/LogCleaner.zip",
+  "DownloadLinkUpdate": "https://github.com/msdx321/LogCleaner/releases/download/v1.0.0.0/LogCleaner.zip"
 }
 ]
